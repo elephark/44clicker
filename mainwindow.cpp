@@ -18,7 +18,6 @@ MainWindow::MainWindow(QWidget *parent)
 	_lastClicks.majDeductLv1Clicks = 0;
 	_lastClicks.majDeductLv2Clicks = 0;
 	_lastClicks.majDeductLv3Clicks = 0;
-
 }
 
 MainWindow::~MainWindow()
@@ -31,7 +30,7 @@ MainWindow::~MainWindow()
  * @param event A keypress event.
  */
 void MainWindow::keyPressEvent(QKeyEvent *event) {
-	// An attempt at defeating autorepeat. Unfortunately not consistent.
+	// An attempt at defeating autorepeat. Kinda works, but unfortunately not consistently.
 	if (event->isAutoRepeat()) {return;}
 
 	switch(event->key()) {
@@ -82,7 +81,6 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event) {
 	(void)event;
 }
 
-
 /**
  * @brief Adjusts the plus click counter, then updates the total clicks.
  * @param qty How many clicks to add (normally this will be 1).
@@ -108,7 +106,6 @@ void MainWindow::minusClick(int qty) {
  * @param level Which level of major deduct
  */
 void MainWindow::majorDeductClick (int level) {
-
 	switch(level) {
 	case 1:
 		_curClicks.majDeductLv1Clicks++;
@@ -126,10 +123,7 @@ void MainWindow::majorDeductClick (int level) {
 		break;
 	}
 	updateTotalClicks();
-
 }
-
-
 
 /**
  * @brief Updates the total clicks and total major deducts LCDs.
@@ -182,16 +176,6 @@ void MainWindow::undoReset() {
 	ui->majDeductLv1Lcd->display(_curClicks.majDeductLv1Clicks);
 	ui->majDeductLv2Lcd->display(_curClicks.majDeductLv2Clicks);
 	ui->majDeductLv3Lcd->display(_curClicks.majDeductLv3Clicks);
+
 	updateTotalClicks();
 }
-
-
-
-
-
-
-
-
-
-
-
