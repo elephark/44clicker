@@ -102,8 +102,8 @@ void MainWindow::minusClick(int qty) {
 }
 
 /**
- * @brief Adjusts
- * @param level Which level of major deduct
+ * @brief Adjusts counters for major deducts, then updates the total clicks.
+ * @param level Which level of major deduct.
  */
 void MainWindow::majorDeductClick (int level) {
 	switch(level) {
