@@ -39,8 +39,13 @@ private:
 	void resetClicks();
 	void undoReset();
 
+	void timerStartPause();
+	void timerReset();
+
 	ClickScore _curClicks;
 	ClickScore _lastClicks;
+
+	QTimer *_fsTimer;
 
 //	QLCDNumber *totalClicksLcd;
 //	QLCDNumber *plusClicksLcd;

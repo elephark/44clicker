@@ -9,15 +9,19 @@ MainWindow::MainWindow(QWidget *parent)
 	ui->setupUi(this);
 	setWindowTitle("44clicker");
 
-	// wipe _curClicks
+	// Wipe _curClicks.
 	resetClicks();
 
-	// reset _lastClicks so we don't restore garbage
+	// Weset _lastClicks so we don't restore garbage.
 	_lastClicks.plusClicks = 0;
 	_lastClicks.minusClicks = 0;
 	_lastClicks.majDeductLv1Clicks = 0;
 	_lastClicks.majDeductLv2Clicks = 0;
 	_lastClicks.majDeductLv3Clicks = 0;
+
+	// Set up the freestyle timer.
+	_fsTimer = new QTimer(this);
+
 }
 
 MainWindow::~MainWindow()
@@ -69,6 +73,14 @@ void MainWindow::keyPressEvent(QKeyEvent *event) {
 	case Qt::Key_D:
 		// Major deduct level 3 (5 by default)
 		majorDeductClick(3);
+		break;
+	case Qt::Key_Q:
+		// Start/pause the timer
+		timerStartPause();
+		break;
+	case Qt::Key_W:
+		// Reset the timer
+		timerReset();
 		break;
 	default:
 //		QFrame::keyPressEvent(event);
@@ -179,3 +191,28 @@ void MainWindow::undoReset() {
 
 	updateTotalClicks();
 }
+
+/**
+ * @brief MainWindow::timerStartPause
+ */
+void MainWindow::timerStartPause() {
+
+}
+
+/**
+ * @brief MainWindow::timerReset
+ */
+void MainWindow::timerReset() {
+
+}
+
+
+
+
+
+
+
+
+
+
+

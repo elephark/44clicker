@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>778</width>
-    <height>463</height>
+    <width>738</width>
+    <height>515</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -49,6 +49,80 @@ QLabel#majDeductTotalLabel {
     <item>
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
+       <layout class="QHBoxLayout" name="timerLayout">
+        <item>
+         <layout class="QVBoxLayout" name="timeElapsedLayout">
+          <item>
+           <widget class="QLabel" name="timeElapsedLabel">
+            <property name="text">
+             <string>Time elapsed</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignBottom|Qt::AlignHCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLCDNumber" name="timeElapsedLcd">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>80</height>
+             </size>
+            </property>
+            <property name="digitCount">
+             <number>5</number>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QVBoxLayout" name="timeRemainingLayout">
+          <item>
+           <widget class="QLabel" name="timeRemainingLabel">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>Time remaining</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignBottom|Qt::AlignHCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLCDNumber" name="timeRemainingLcd">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>80</height>
+             </size>
+            </property>
+            <property name="digitCount">
+             <number>5</number>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>Timer: [Q] Start/Pause, [W] Reset</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignHCenter|Qt::AlignTop</set>
+        </property>
+       </widget>
+      </item>
+      <item>
        <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
          <layout class="QVBoxLayout" name="minusClicksVLayout">
@@ -88,10 +162,16 @@ QLabel#majDeductTotalLabel {
           <item>
            <widget class="QLCDNumber" name="minusClicksLcd">
             <property name="sizePolicy">
-             <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
               <horstretch>0</horstretch>
               <verstretch>1</verstretch>
              </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>120</height>
+             </size>
             </property>
             <property name="digitCount">
              <number>4</number>
@@ -151,10 +231,16 @@ QLabel#majDeductTotalLabel {
           <item>
            <widget class="QLCDNumber" name="plusClicksLcd">
             <property name="sizePolicy">
-             <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
               <horstretch>0</horstretch>
               <verstretch>1</verstretch>
              </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>120</height>
+             </size>
             </property>
             <property name="digitCount">
              <number>4</number>
@@ -214,10 +300,16 @@ QLabel#majDeductTotalLabel {
           <item>
            <widget class="QLCDNumber" name="totalClicksLcd">
             <property name="sizePolicy">
-             <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
               <horstretch>0</horstretch>
               <verstretch>1</verstretch>
              </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>120</height>
+             </size>
             </property>
             <property name="frameShape">
              <enum>QFrame::Panel</enum>
@@ -266,6 +358,12 @@ QLabel#majDeductTotalLabel {
           </item>
           <item>
            <widget class="QLCDNumber" name="majDeductLv1Lcd">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
             <property name="minimumSize">
              <size>
               <width>0</width>
@@ -293,6 +391,12 @@ QLabel#majDeductTotalLabel {
           </item>
           <item>
            <widget class="QLCDNumber" name="majDeductLv2Lcd">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
             <property name="minimumSize">
              <size>
               <width>0</width>
@@ -320,6 +424,12 @@ QLabel#majDeductTotalLabel {
           </item>
           <item>
            <widget class="QLCDNumber" name="majDeductLv3Lcd">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
             <property name="minimumSize">
              <size>
               <width>0</width>
@@ -348,7 +458,7 @@ QLabel#majDeductTotalLabel {
           <item>
            <widget class="QLCDNumber" name="majDeductTotalLcd">
             <property name="sizePolicy">
-             <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
@@ -383,7 +493,7 @@ QLabel#majDeductTotalLabel {
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>778</width>
+     <width>738</width>
      <height>22</height>
     </rect>
    </property>
