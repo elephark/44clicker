@@ -26,6 +26,10 @@ public:
 	MainWindow(QWidget *parent = nullptr);
 	~MainWindow();
 
+private slots:
+	void timerFinished() { timerStartPause(true); }
+	void timerRedraw();
+
 private:
 	Ui::MainWindow *ui;
 
@@ -39,13 +43,17 @@ private:
 	void resetClicks();
 	void undoReset();
 
-	void timerStartPause();
+	bool timerStartPause(bool forceStop = false);
 	void timerReset();
 
 	ClickScore _curClicks;
 	ClickScore _lastClicks;
 
-	QTimer *_fsTimer;
+	QTimer *_fsTimer;          ///< Timer for keeping track of the fs run time
+	QTimer *_dispRefreshTimer; ///< Timer for deciding when to refresh the display during the fs
+	int _totalTimeSetting;     ///< Time in seconds we'll reset _fsTimer to (ie the fs length)
+	int _timerDisplayRefresh;  ///< Time in ms between display updates while _fsTimer is running
+	int _timeRemaining;        ///< How much time is left in the freestyle?
 
 //	QLCDNumber *totalClicksLcd;
 //	QLCDNumber *plusClicksLcd;

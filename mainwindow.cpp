@@ -2,9 +2,18 @@
 #include "ui_mainwindow.h"
 #include <QtWidgets>
 
+/// Default refresh rate in ms while the fs timer is running.
+#define DEFAULT_DISPLAY_REFRESH 71
+/// Default length of a freestyle, in seconds
+#define DEFAULT_FREESTYLE_LENGTH 60
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
+    , _fsTimer(new QTimer(this))
+    , _dispRefreshTimer(new QTimer(this))
+    , _totalTimeSetting(DEFAULT_FREESTYLE_LENGTH * 1000)
+    , _timerDisplayRefresh(DEFAULT_DISPLAY_REFRESH)
 {
 	ui->setupUi(this);
 	setWindowTitle("44clicker");
@@ -12,16 +21,21 @@ MainWindow::MainWindow(QWidget *parent)
 	// Wipe _curClicks.
 	resetClicks();
 
-	// Weset _lastClicks so we don't restore garbage.
+	// Reset _lastClicks so we don't restore garbage.
 	_lastClicks.plusClicks = 0;
 	_lastClicks.minusClicks = 0;
 	_lastClicks.majDeductLv1Clicks = 0;
 	_lastClicks.majDeductLv2Clicks = 0;
 	_lastClicks.majDeductLv3Clicks = 0;
 
-	// Set up the freestyle timer.
-	_fsTimer = new QTimer(this);
+	// Strive for millisecond accuracy.
+	_fsTimer->setTimerType(Qt::PreciseTimer);
+	_fsTimer->setSingleShot(true);
+	connect(_fsTimer, SIGNAL(QTimer::timeout), this, SLOT(timerFinished()));
 
+	// We're less concerned about _dispRefreshTimer's accuracy. It doesn't really matter.
+	// Let's hook it up.
+	connect(_dispRefreshTimer, SIGNAL(QTimer::timeout), this, SLOT(timerRedraw()));
 }
 
 MainWindow::~MainWindow()
@@ -194,19 +208,59 @@ void MainWindow::undoReset() {
 
 /**
  * @brief MainWindow::timerStartPause
+ *
+ * @param forceStop Set to true to guarantee a stop.
+ *
+ * @return True if we just started the timer, false if we just paused.
  */
-void MainWindow::timerStartPause() {
+bool MainWindow::timerStartPause(bool forceStop) {
 
+
+	// If the timer is already running, pause it.
+	if (_fsTimer->isActive() || forceStop) { // todo: double check to make sure this isn't a bug
+		// Cache the remaining time and stop the fs timer.
+		_timeRemaining = _fsTimer->remainingTime();
+		_fsTimer->stop();
+
+		// Stop the refresh timer.
+		_dispRefreshTimer->stop();
+
+		// One last redraw of the timer values.
+		timerRedraw();
+		return false;
+	}
+	// If the timer isn't running, start it.
+	else {
+		// Load the countdown timer with the total remaining time and kick it off.
+		_fsTimer->start(_timeRemaining);
+
+		// Kick off the refresh timer.
+		_dispRefreshTimer->start(_timerDisplayRefresh);
+
+		// redraw probably not necessary tbh fam
+		return true;
+	}
 }
 
 /**
  * @brief MainWindow::timerReset
  */
 void MainWindow::timerReset() {
+	// Stop everything.
+	_fsTimer->stop();
+	_dispRefreshTimer->stop();
 
+	// Reload things afresh.
+	_timeRemaining = _totalTimeSetting;
+
+	// Redraw timer values.
+	timerRedraw();
 }
 
 
+void MainWindow::timerRedraw() {
+	// todo
+}
 
 
 
