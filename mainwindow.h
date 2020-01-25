@@ -46,8 +46,8 @@ private:
 	bool timerStartPause(bool forceStop = false);
 	void timerReset();
 
-	ClickScore _curClicks;
-	ClickScore _lastClicks;
+	ClickScore _curClicks;     ///< Here we keep track of the current number of clicks
+	ClickScore _lastClicks;    ///< Here we back up the clicks when resetting so we can undo
 
 	QTimer *_fsTimer;          ///< Timer for keeping track of the fs run time
 	QTimer *_dispRefreshTimer; ///< Timer for deciding when to refresh the display during the fs
