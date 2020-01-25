@@ -54,10 +54,5 @@ private:
 	int _totalTimeSetting;     ///< Time in seconds we'll reset _fsTimer to (ie the fs length)
 	int _timerDisplayRefresh;  ///< Time in ms between display updates while _fsTimer is running
 	int _timeRemaining;        ///< How much time is left in the freestyle?
-
-//	QLCDNumber *totalClicksLcd;
-//	QLCDNumber *plusClicksLcd;
-//	QLCDNumber *minusClicksLcd;
-
 };
 #endif // MAINWINDOW_H
