@@ -114,54 +114,55 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event) {
 }
 
 /**
- * @brief Adjusts the plus click counter, then updates the total clicks.
+ * @brief Adjusts the plus click counter, then updates the clicks.
  * @param qty How many clicks to add (normally this will be 1).
  */
 void MainWindow::plusClick(int qty) {
 	_curClicks.plusClicks += qty;
-	ui->plusClicksLcd->display(_curClicks.plusClicks);
-	updateTotalClicks();
+	displayClicks();
 }
 
 /**
- * @brief Adjusts the minus click counter, then updates the total clicks.
+ * @brief Adjusts the minus click counter, then updates the clicks.
  * @param qty How many clicks to add (normally this will be -1).
  */
 void MainWindow::minusClick(int qty) {
 	_curClicks.minusClicks += qty;
-	ui->minusClicksLcd->display(_curClicks.minusClicks);
-	updateTotalClicks();
+	displayClicks();
 }
 
 /**
- * @brief Adjusts counters for major deducts, then updates the total clicks.
+ * @brief Adjusts counters for major deducts, then updates the clicks.
  * @param level Which level of major deduct.
  */
 void MainWindow::majorDeductClick (int level) {
 	switch(level) {
 	case 1:
 		_curClicks.majDeductLv1Clicks++;
-		ui->majDeductLv1Lcd->display(_curClicks.majDeductLv1Clicks);
 		break;
 	case 2:
 		_curClicks.majDeductLv2Clicks += 3; // todo: magic numberzzzzz
-		ui->majDeductLv2Lcd->display(_curClicks.majDeductLv2Clicks);
 		break;
 	case 3:
 		_curClicks.majDeductLv3Clicks += 5;
-		ui->majDeductLv3Lcd->display(_curClicks.majDeductLv3Clicks);
 		break;
 	default:
 		break;
 	}
-	updateTotalClicks();
+	displayClicks();
 }
 
 /**
- * @brief Updates the total clicks and total major deducts LCDs.
+ * @brief Updates the LCDs showing clicks and major deducts.
  */
-void MainWindow::updateTotalClicks() {
+void MainWindow::displayClicks() {
+	ui->plusClicksLcd->display(_curClicks.plusClicks);
+	ui->minusClicksLcd->display(_curClicks.minusClicks);
 	ui->totalClicksLcd->display(_curClicks.plusClicks + _curClicks.minusClicks);
+
+	ui->majDeductLv1Lcd->display(_curClicks.majDeductLv1Clicks);
+	ui->majDeductLv2Lcd->display(_curClicks.majDeductLv2Clicks);
+	ui->majDeductLv3Lcd->display(_curClicks.majDeductLv3Clicks);
 	ui->majDeductTotalLcd->display(_curClicks.majDeductLv1Clicks + _curClicks.majDeductLv2Clicks + _curClicks.majDeductLv3Clicks);
 }
 
@@ -179,17 +180,12 @@ void MainWindow::resetClicks() {
 	// Do the reset part
 	_curClicks.plusClicks = 0;
 	_curClicks.minusClicks = 0;
-	ui->plusClicksLcd->display(_curClicks.plusClicks);
-	ui->minusClicksLcd->display(_curClicks.minusClicks);
 
 	_curClicks.majDeductLv1Clicks = 0;
 	_curClicks.majDeductLv2Clicks = 0;
 	_curClicks.majDeductLv3Clicks = 0;
-	ui->majDeductLv1Lcd->display(_curClicks.majDeductLv1Clicks);
-	ui->majDeductLv2Lcd->display(_curClicks.majDeductLv2Clicks);
-	ui->majDeductLv3Lcd->display(_curClicks.majDeductLv3Clicks);
 
-	updateTotalClicks();
+	displayClicks();
 }
 
 /**
@@ -203,13 +199,7 @@ void MainWindow::undoReset() {
 	_curClicks.majDeductLv2Clicks = _lastClicks.majDeductLv2Clicks;
 	_curClicks.majDeductLv3Clicks = _lastClicks.majDeductLv3Clicks;
 
-	ui->plusClicksLcd->display(_curClicks.plusClicks);
-	ui->minusClicksLcd->display(_curClicks.minusClicks);
-	ui->majDeductLv1Lcd->display(_curClicks.majDeductLv1Clicks);
-	ui->majDeductLv2Lcd->display(_curClicks.majDeductLv2Clicks);
-	ui->majDeductLv3Lcd->display(_curClicks.majDeductLv3Clicks);
-
-	updateTotalClicks();
+	displayClicks();
 }
 
 /**

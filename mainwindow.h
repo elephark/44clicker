@@ -39,7 +39,7 @@ private:
 	void plusClick(int qty = 1);
 	void minusClick(int qty = -1);
 	void majorDeductClick (int level);
-	void updateTotalClicks();
+	void displayClicks();
 	void resetClicks();
 	void undoReset();
 
