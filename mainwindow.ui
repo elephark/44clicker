@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>738</width>
-    <height>515</height>
+    <width>725</width>
+    <height>552</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -71,7 +71,7 @@ QLabel#majDeductTotalLabel {
              </size>
             </property>
             <property name="digitCount">
-             <number>5</number>
+             <number>8</number>
             </property>
            </widget>
           </item>
@@ -104,7 +104,7 @@ QLabel#majDeductTotalLabel {
              </size>
             </property>
             <property name="digitCount">
-             <number>5</number>
+             <number>8</number>
             </property>
            </widget>
           </item>
@@ -522,7 +522,7 @@ QLabel#majDeductTotalLabel {
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>738</width>
+     <width>725</width>
      <height>22</height>
     </rect>
    </property>

@@ -2,18 +2,21 @@
 #include "ui_mainwindow.h"
 #include <QtWidgets>
 
-/// Default refresh rate in ms while the fs timer is running.
-#define DEFAULT_DISPLAY_REFRESH 71
-/// Default length of a freestyle, in seconds
-#define DEFAULT_FREESTYLE_LENGTH 60
+
+/// Default refresh rate in ms while the fs timer is running. Should be prime.
+#define DEFAULT_DISPLAY_REFRESH 47
+/// Default length of a freestyle, in ms.
+#define DEFAULT_FREESTYLE_LENGTH 120000
+
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
     , _fsTimer(new QTimer(this))
     , _dispRefreshTimer(new QTimer(this))
-    , _totalTimeSetting(DEFAULT_FREESTYLE_LENGTH * 1000)
+    , _totalTimeSetting(DEFAULT_FREESTYLE_LENGTH)
     , _timerDisplayRefresh(DEFAULT_DISPLAY_REFRESH)
+    , _timeRemaining(_totalTimeSetting)
 {
 	ui->setupUi(this);
 	setWindowTitle("44clicker");
@@ -31,11 +34,14 @@ MainWindow::MainWindow(QWidget *parent)
 	// Strive for millisecond accuracy.
 	_fsTimer->setTimerType(Qt::PreciseTimer);
 	_fsTimer->setSingleShot(true);
-	connect(_fsTimer, SIGNAL(QTimer::timeout), this, SLOT(timerFinished()));
+	_fsTimer->setInterval(_totalTimeSetting);
+	connect(_fsTimer, SIGNAL(timeout()), this, SLOT(timerFinished()));
 
 	// We're less concerned about _dispRefreshTimer's accuracy. It doesn't really matter.
 	// Let's hook it up.
-	connect(_dispRefreshTimer, SIGNAL(QTimer::timeout), this, SLOT(timerRedraw()));
+	connect(_dispRefreshTimer, SIGNAL(timeout()), this, SLOT(timerRedraw()));
+
+	timerRedraw();
 }
 
 MainWindow::~MainWindow()
@@ -207,20 +213,22 @@ void MainWindow::undoReset() {
 }
 
 /**
- * @brief MainWindow::timerStartPause
+ * @brief Starts or stops (whichever makes sense) the freestyle timer.
+ * Also restarts it if the time was up.
  *
  * @param forceStop Set to true to guarantee a stop.
  *
  * @return True if we just started the timer, false if we just paused.
  */
 bool MainWindow::timerStartPause(bool forceStop) {
-
-
 	// If the timer is already running, pause it.
 	if (_fsTimer->isActive() || forceStop) { // todo: double check to make sure this isn't a bug
 		// Cache the remaining time and stop the fs timer.
 		_timeRemaining = _fsTimer->remainingTime();
 		_fsTimer->stop();
+
+		// Hold bounds.
+		if (_timeRemaining < 0) { _timeRemaining = 0; }
 
 		// Stop the refresh timer.
 		_dispRefreshTimer->stop();
@@ -231,6 +239,9 @@ bool MainWindow::timerStartPause(bool forceStop) {
 	}
 	// If the timer isn't running, start it.
 	else {
+		// Automatically restart if the timer has expired.
+		if (!_timeRemaining) { _timeRemaining = _totalTimeSetting; }
+
 		// Load the countdown timer with the total remaining time and kick it off.
 		_fsTimer->start(_timeRemaining);
 
@@ -243,7 +254,7 @@ bool MainWindow::timerStartPause(bool forceStop) {
 }
 
 /**
- * @brief MainWindow::timerReset
+ * @brief Resets the timer. Also stops it if it was running.
  */
 void MainWindow::timerReset() {
 	// Stop everything.
@@ -257,16 +268,39 @@ void MainWindow::timerReset() {
 	timerRedraw();
 }
 
-
+/**
+ * @brief Redraws the LCD elements comprising the freestyle timer.
+ */
 void MainWindow::timerRedraw() {
-	// todo
+	// Cache the remaining time.
+	if (_fsTimer->isActive()) {
+		_timeRemaining = _fsTimer->remainingTime();
+	}
+
+	// Figure out how much time is left.
+	int timeElapsed = _totalTimeSetting - _timeRemaining + 9; // the 9 makes it add up on screen
+	if (timeElapsed < 0) { timeElapsed = 0; } // PARANOiA.mp3
+
+	// Divide time remaining down to minutes, seconds, hundredths, and push it out to the screen.
+	int mm = _timeRemaining / (60 * 1000);
+	int ss = (_timeRemaining % (60 * 1000)) / 1000;
+	int cc = (_timeRemaining % 1000) / 10;
+	QString dispText;
+
+	dispText = QString("%1:%2.%3")
+	        .arg(mm, 2, 10, QChar('0'))
+	        .arg(ss, 2, 10, QChar('0'))
+	        .arg(cc, 2, 10, QChar('0'));
+	ui->timeRemainingLcd->display(dispText);
+
+	// Do it again for time elapsed.
+	mm = timeElapsed / (60 * 1000);
+	ss = (timeElapsed % (60 * 1000)) / 1000;
+	cc = (timeElapsed % 1000) / 10;
+
+	dispText = QString("%1:%2.%3")
+	        .arg(mm, 2, 10, QChar('0'))
+	        .arg(ss, 2, 10, QChar('0'))
+	        .arg(cc, 2, 10, QChar('0'));
+	ui->timeElapsedLcd->display(dispText);
 }
-
-
-
-
-
-
-
-
-
