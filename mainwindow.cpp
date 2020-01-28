@@ -21,6 +21,9 @@ MainWindow::MainWindow(QWidget *parent)
 	ui->setupUi(this);
 	setWindowTitle("44clicker");
 
+	// Exit strategy.
+	connect(ui->actionQuit, SIGNAL(triggered()), this, SLOT(close()));
+
 	// Wipe _curClicks.
 	resetClicks();
 
