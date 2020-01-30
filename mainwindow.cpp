@@ -24,15 +24,23 @@ MainWindow::MainWindow(QWidget *parent)
 	// Exit strategy.
 	connect(ui->actionQuit, SIGNAL(triggered()), this, SLOT(close()));
 
-	// Wipe _curClicks.
-	resetClicks();
+	// Set up the undo signal.
+	connect(ui->actionUndoReset, SIGNAL(triggered()), this, SLOT(undoReset()));
 
-	// Reset _lastClicks so we don't restore garbage.
+	// Initialize the click structs to nice happy known values.
+	_curClicks.plusClicks = 0;
+	_curClicks.minusClicks = 0;
+	_curClicks.majDeductLv1Clicks = 0;
+	_curClicks.majDeductLv2Clicks = 0;
+	_curClicks.majDeductLv3Clicks = 0;
+
 	_lastClicks.plusClicks = 0;
 	_lastClicks.minusClicks = 0;
 	_lastClicks.majDeductLv1Clicks = 0;
 	_lastClicks.majDeductLv2Clicks = 0;
 	_lastClicks.majDeductLv3Clicks = 0;
+
+	displayClicks();
 
 	// Strive for millisecond accuracy.
 	_fsTimer->setTimerType(Qt::PreciseTimer);
@@ -64,10 +72,6 @@ void MainWindow::keyPressEvent(QKeyEvent *event) {
 	case Qt::Key_R:
 		// Reset the score
 		resetClicks();
-		break;
-	case Qt::Key_U:
-		// Undo the last reset
-		undoReset();
 		break;
 	case Qt::Key_Slash:
 		// One plus click
@@ -173,6 +177,12 @@ void MainWindow::displayClicks() {
  * @brief Resets all clicks to zero so we can start over.
  */
 void MainWindow::resetClicks() {
+	// Make it so we can undo.
+	// Note that this doesn't check if anything was actually changed. If they start up, immediately
+	// reset, click some, and then undo, everything will "undo" back to zero, which is kinda weird.
+	// Further note that I don't much care what happens if someone really wants to do that.
+	ui->actionUndoReset->setEnabled(true);
+
 	// Back up first
 	_lastClicks.plusClicks = _curClicks.plusClicks;
 	_lastClicks.minusClicks = _curClicks.minusClicks;

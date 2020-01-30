@@ -29,6 +29,7 @@ public:
 private slots:
 	void timerFinished() { timerStartPause(true); }
 	void timerRedraw();
+	void undoReset();
 
 private:
 	Ui::MainWindow *ui;
@@ -41,7 +42,6 @@ private:
 	void majorDeductClick (int level);
 	void displayClicks();
 	void resetClicks();
-	void undoReset();
 
 	bool timerStartPause(bool forceStop = false);
 	void timerReset();
