@@ -319,7 +319,7 @@ QLabel#majDeductTotalLabel {
           <item>
            <widget class="QLabel" name="totalClicksInstructionLabel">
             <property name="text">
-             <string>[R] Reset all, [U] Undo last reset</string>
+             <string>[R] Reset all clicks</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignBottom|Qt::AlignHCenter</set>
