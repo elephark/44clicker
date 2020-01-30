@@ -530,6 +530,8 @@ QLabel#majDeductTotalLabel {
     <property name="title">
      <string>&amp;File</string>
     </property>
+    <addaction name="actionPrefs"/>
+    <addaction name="separator"/>
     <addaction name="actionQuit"/>
    </widget>
    <widget class="QMenu" name="menuEdit">
@@ -559,6 +561,11 @@ QLabel#majDeductTotalLabel {
    </property>
    <property name="shortcut">
     <string>Ctrl+U</string>
+   </property>
+  </action>
+  <action name="actionPrefs">
+   <property name="text">
+    <string>&amp;Preferences...</string>
    </property>
   </action>
  </widget>

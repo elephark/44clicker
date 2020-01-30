@@ -30,6 +30,7 @@ private slots:
 	void timerFinished() { timerStartPause(true); }
 	void timerRedraw();
 	void undoReset();
+	void showPrefDialog();
 
 private:
 	Ui::MainWindow *ui;

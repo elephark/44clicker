@@ -1,7 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QtWidgets>
-
+#include "prefdialog.h"
 
 /// Default refresh rate in ms while the fs timer is running. Should be prime.
 #define DEFAULT_DISPLAY_REFRESH 47
@@ -26,6 +26,9 @@ MainWindow::MainWindow(QWidget *parent)
 
 	// Set up the undo signal.
 	connect(ui->actionUndoReset, SIGNAL(triggered()), this, SLOT(undoReset()));
+
+
+	connect(ui->actionPrefs, SIGNAL(triggered()), this, SLOT(showPrefDialog()));
 
 	// Initialize the click structs to nice happy known values.
 	_curClicks.plusClicks = 0;
@@ -306,4 +309,10 @@ void MainWindow::timerRedraw() {
 	        .arg(ss, 2, 10, QChar('0'))
 	        .arg(cc, 2, 10, QChar('0'));
 	ui->timeElapsedLcd->display(dispText);
+}
+
+
+void MainWindow::showPrefDialog() {
+	PrefDialog d(this);
+	d.exec();
 }
