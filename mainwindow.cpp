@@ -311,8 +311,12 @@ void MainWindow::timerRedraw() {
 	ui->timeElapsedLcd->display(dispText);
 }
 
-
+/**
+ * @brief Slot for bringing up a preferences dialog.
+ */
 void MainWindow::showPrefDialog() {
 	PrefDialog d(this);
-	d.exec();
+	if (d.exec() == QDialog::Accepted) {
+		// todo: They clicked OK, so save/reload the new prefs.
+	}
 }
