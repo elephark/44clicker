@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include "clickprefs.h"
 
 QT_BEGIN_NAMESPACE
 class QLCDNumber;
@@ -52,8 +53,8 @@ private:
 
 	QTimer *_fsTimer;          ///< Timer for keeping track of the fs run time
 	QTimer *_dispRefreshTimer; ///< Timer for deciding when to refresh the display during the fs
-	int _totalTimeSetting;     ///< Time in seconds we'll reset _fsTimer to (ie the fs length)
-	int _timerDisplayRefresh;  ///< Time in ms between display updates while _fsTimer is running
 	int _timeRemaining;        ///< How much time is left in the freestyle?
+
+	ClickPrefs *_prefs;
 };
 #endif // MAINWINDOW_H

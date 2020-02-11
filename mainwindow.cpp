@@ -3,20 +3,13 @@
 #include <QtWidgets>
 #include "prefdialog.h"
 
-/// Default refresh rate in ms while the fs timer is running. Should be prime.
-#define DEFAULT_DISPLAY_REFRESH 47
-/// Default length of a freestyle, in ms.
-#define DEFAULT_FREESTYLE_LENGTH 120000
-
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
     , _fsTimer(new QTimer(this))
     , _dispRefreshTimer(new QTimer(this))
-    , _totalTimeSetting(DEFAULT_FREESTYLE_LENGTH)
-    , _timerDisplayRefresh(DEFAULT_DISPLAY_REFRESH)
-    , _timeRemaining(_totalTimeSetting)
+    , _prefs(new ClickPrefs(this))
 {
 	ui->setupUi(this);
 	setWindowTitle("44clicker");
@@ -27,7 +20,7 @@ MainWindow::MainWindow(QWidget *parent)
 	// Set up the undo signal.
 	connect(ui->actionUndoReset, SIGNAL(triggered()), this, SLOT(undoReset()));
 
-
+	// We probably want to be able to get to the pref dialog...
 	connect(ui->actionPrefs, SIGNAL(triggered()), this, SLOT(showPrefDialog()));
 
 	// Initialize the click structs to nice happy known values.
@@ -48,8 +41,9 @@ MainWindow::MainWindow(QWidget *parent)
 	// Strive for millisecond accuracy.
 	_fsTimer->setTimerType(Qt::PreciseTimer);
 	_fsTimer->setSingleShot(true);
-	_fsTimer->setInterval(_totalTimeSetting);
+	_fsTimer->setInterval(_prefs->totalTimeSetting());
 	connect(_fsTimer, SIGNAL(timeout()), this, SLOT(timerFinished()));
+	_timeRemaining = _prefs->totalTimeSetting();
 
 	// We're less concerned about _dispRefreshTimer's accuracy. It doesn't really matter.
 	// Let's hook it up.
@@ -246,13 +240,13 @@ bool MainWindow::timerStartPause(bool forceStop) {
 	// If the timer isn't running, start it.
 	else {
 		// Automatically restart if the timer has expired.
-		if (!_timeRemaining) { _timeRemaining = _totalTimeSetting; }
+		if (!_timeRemaining) { _timeRemaining = _prefs->totalTimeSetting(); }
 
 		// Load the countdown timer with the total remaining time and kick it off.
 		_fsTimer->start(_timeRemaining);
 
 		// Kick off the refresh timer.
-		_dispRefreshTimer->start(_timerDisplayRefresh);
+		_dispRefreshTimer->start(_prefs->timerDisplayRefresh());
 
 		// redraw probably not necessary tbh fam
 		return true;
@@ -268,7 +262,7 @@ void MainWindow::timerReset() {
 	_dispRefreshTimer->stop();
 
 	// Reload things afresh.
-	_timeRemaining = _totalTimeSetting;
+	_timeRemaining = _prefs->totalTimeSetting();
 
 	// Redraw timer values.
 	timerRedraw();
@@ -284,7 +278,7 @@ void MainWindow::timerRedraw() {
 	}
 
 	// Figure out how much time is left.
-	int timeElapsed = _totalTimeSetting - _timeRemaining + 9; // the 9 makes it add up on screen
+	int timeElapsed = _prefs->totalTimeSetting() - _timeRemaining + 9; // the 9 makes it add up on screen
 	if (timeElapsed < 0) { timeElapsed = 0; } // PARANOiA.mp3
 
 	// Divide time remaining down to minutes, seconds, hundredths, and push it out to the screen.
