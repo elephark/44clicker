@@ -76,7 +76,7 @@ void MainWindow::keyPressEvent(QKeyEvent *event) {
 		break;
 	case Qt::Key_Period:
 		// Three plus clicks
-		plusClick(3);
+		plusClick(_prefs->multiClickWeight());
 		break;
 	case Qt::Key_Z:
 		// One minus click
@@ -84,18 +84,18 @@ void MainWindow::keyPressEvent(QKeyEvent *event) {
 		break;
 	case Qt::Key_X:
 		// Three minus clicks
-		minusClick(-3);
+		minusClick(_prefs->multiClickWeight() * -1);
 		break;
 	case Qt::Key_A:
-		// Major deduct level 1 (1 by default)
+		// Major deduct level 1 (restart)
 		majorDeductClick(1);
 		break;
 	case Qt::Key_S:
-		// Major deduct level 2 (3 by default)
+		// Major deduct level 2 (switch)
 		majorDeductClick(2);
 		break;
 	case Qt::Key_D:
-		// Major deduct level 3 (5 by default)
+		// Major deduct level 3 (detach)
 		majorDeductClick(3);
 		break;
 	case Qt::Key_Q:
@@ -142,13 +142,13 @@ void MainWindow::minusClick(int qty) {
 void MainWindow::majorDeductClick (int level) {
 	switch(level) {
 	case 1:
-		_curClicks.majDeductLv1Clicks++;
+		_curClicks.majDeductLv1Clicks += _prefs->MDWeight(0); // todo: zero vs one indexinggggg
 		break;
 	case 2:
-		_curClicks.majDeductLv2Clicks += 3; // todo: magic numberzzzzz
+		_curClicks.majDeductLv2Clicks += _prefs->MDWeight(1);
 		break;
 	case 3:
-		_curClicks.majDeductLv3Clicks += 5;
+		_curClicks.majDeductLv3Clicks += _prefs->MDWeight(2);
 		break;
 	default:
 		break;
