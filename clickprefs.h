@@ -17,7 +17,7 @@
 #define DEFAULT_FREESTYLE_LENGTH 120000
 /// Default refresh rate in ms while the fs timer is running. Should be prime.
 #define DEFAULT_DISPLAY_REFRESH 47
-/// Default number of digits to show for partial seconds.
+/// Default number of digits to show for partial seconds (ie 2 would be hundredths).
 #define DEFAULT_TIMER_DIGITS 2
 /// Is the timer visible by default?
 #define DEFAULT_TIMER_VISIBILITY true
