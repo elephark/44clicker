@@ -2,6 +2,7 @@
 #define PREFDIALOG_H
 
 #include <QDialog>
+#include "clickprefs.h"
 
 namespace Ui {
 class PrefDialog;
@@ -17,6 +18,8 @@ public:
 
 private:
 	Ui::PrefDialog *ui;
+
+	ClickPrefs *_tmpPrefs;      ///< Where we'll store things while we decide how to run things.
 };
 
 #endif // PREFDIALOG_H

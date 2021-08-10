@@ -27,6 +27,9 @@ public:
 	MainWindow(QWidget *parent = nullptr);
 	~MainWindow();
 
+	/// This is so the prefs dialog has something to work with.
+	ClickPrefs *prefs() const { return _prefs; }
+
 private slots:
 	void timerFinished() { timerStartPause(true); }
 	void timerRedraw();
