@@ -33,6 +33,16 @@ PrefDialog::PrefDialog(QWidget *parent) :
 		qDebug() << "_tmpPrefs->totalTimeSetting =" << _tmpPrefs->totalTimeSetting();
 		qDebug() << "p->totalTimeSetting =" << p->totalTimeSetting();
 
+		// Populate the values in the widgets.
+		ui->md1SpinBox->setValue(_tmpPrefs->MDWeight(0));
+		ui->md2SpinBox->setValue(_tmpPrefs->MDWeight(1));
+		ui->md3SpinBox->setValue(_tmpPrefs->MDWeight(2));
+		ui->multiClickSpinBox->setValue(_tmpPrefs->multiClickWeight());
+
+		// If you want to do a >10min freestyle...tough.
+		ui->totalTimeSpinBox->setMaximum(600);
+		// If you want to do a freestyle with a non-integer length in seconds...tough.
+		ui->totalTimeSpinBox->setValue(_tmpPrefs->totalTimeSetting() / 1000);
 	}
 	else {
 		qDebug() << "Error: PrefDialog: Parent invalid, preferences aborting!";

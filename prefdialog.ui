@@ -17,6 +17,76 @@
    <item>
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
+      <layout class="QHBoxLayout" name="md1Layout">
+       <item>
+        <widget class="QLabel" name="md1Label">
+         <property name="text">
+          <string>MajDeduct Lv1 (restart) value</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QSpinBox" name="md1SpinBox"/>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="md2Layout">
+       <item>
+        <widget class="QLabel" name="md2Label">
+         <property name="text">
+          <string>MajDeduct Lv2 (switch) value</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QSpinBox" name="md2SpinBox"/>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="md3Layout">
+       <item>
+        <widget class="QLabel" name="md3Label">
+         <property name="text">
+          <string>MajDeduct Lv3 (break) value</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QSpinBox" name="md3SpinBox"/>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="multiClickLayout">
+       <item>
+        <widget class="QLabel" name="multiClickLabel">
+         <property name="text">
+          <string>Multi-click value</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QSpinBox" name="multiClickSpinBox"/>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="totalTimeLayout">
+       <item>
+        <widget class="QLabel" name="totalTimeLabel">
+         <property name="text">
+          <string>Freestyle length (seconds)</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QSpinBox" name="totalTimeSpinBox"/>
+       </item>
+      </layout>
+     </item>
+     <item>
       <spacer name="verticalSpacer">
        <property name="orientation">
         <enum>Qt::Vertical</enum>
