@@ -44,6 +44,8 @@ PrefDialog::PrefDialog(QWidget *parent) :
 
 		// If you want to do a >10min freestyle...tough.
 		ui->totalTimeSpinBox->setMaximum(600);
+		// If you want to do a <1sec freestyle...tough.
+		ui->totalTimeSpinBox->setMinimum(1);
 		// If you want to do a freestyle with a non-integer length in seconds...tough.
 		ui->totalTimeSpinBox->setValue(_tmpPrefs->totalTimeSetting() / 1000);
 	}
