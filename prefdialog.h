@@ -19,7 +19,11 @@ public:
 private:
 	Ui::PrefDialog *ui;
 
+	ClickPrefs *p = nullptr;    ///< todo: comment, and also rename
 	ClickPrefs *_tmpPrefs;      ///< Where we'll store things while we decide how to run things.
+
+private slots:
+	void savePrefs();
 };
 
 #endif // PREFDIALOG_H

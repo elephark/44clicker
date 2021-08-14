@@ -11,14 +11,17 @@ PrefDialog::PrefDialog(QWidget *parent) :
 {
 	ui->setupUi(this);
 
-//	connect(ui->buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+	setWindowTitle("Preferences");
+
+	connect(ui->buttonBox, SIGNAL(accepted()), this, SLOT(savePrefs()));
 //	connect(ui->buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 
 
-	ClickPrefs *p;
+//	ClickPrefs *p;
 
 	// We'll work with a copy of the prefs.
-	if (dynamic_cast<MainWindow*>(parent)->prefs()) {
+	// todo: We may not need _tmpPrefs after all.
+	if (dynamic_cast<MainWindow*>(parent)->prefs() != nullptr) {
 		// Note: Don't try to use qobject_cast, since MainWindow is a grandchild class of QObject.
 		p = dynamic_cast<MainWindow*>(parent)->prefs();
 		_tmpPrefs = new ClickPrefs;
@@ -59,4 +62,25 @@ PrefDialog::~PrefDialog()
 {
 	delete ui;
 	qDebug() << "PrefDialog::~PrefDialog()";
+}
+
+/**
+ * @brief Copy the settings back once we're done making changes.
+ */
+void PrefDialog::savePrefs()
+{
+	if (p)
+	{
+		// Copy back the dialog contents.
+		p->setMDWeight(0, ui->md1SpinBox->value());
+		p->setMDWeight(1, ui->md2SpinBox->value());
+		p->setMDWeight(2, ui->md3SpinBox->value());
+		p->setMultiClickWeight(ui->multiClickSpinBox->value());
+		p->setTotalTimeSetting(ui->totalTimeSpinBox->value() * 1000);
+
+		qDebug() << "PrefDialog::savePrefs(): Saved prefs";
+	}
+	else {
+		qDebug() << "Error: PrefDialog::savePrefs(): No prefs found!?";
+	}
 }
