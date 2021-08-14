@@ -49,7 +49,7 @@
        <item>
         <widget class="QLabel" name="md3Label">
          <property name="text">
-          <string>MajDeduct Lv3 (break) value</string>
+          <string>MajDeduct Lv3 (detach) value</string>
          </property>
         </widget>
        </item>
