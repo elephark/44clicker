@@ -38,6 +38,7 @@ public:
 	void setTotalTimeSetting(int totalTime) { _totalTimeSetting = totalTime; }
 	void setTimerDisplayRefresh(int timeout) { _timerDisplayRefresh = timeout; }
 
+	bool writePrefs();
 	int MDWeight(int level) const;
 	bool setMDWeight(int level, int weight); // todo: move all the MD functionality to this style
 

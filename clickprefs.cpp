@@ -1,18 +1,42 @@
 #include "clickprefs.h"
+#include <QSettings>
 
 ClickPrefs::ClickPrefs(QObject *parent)
     : QObject(parent)
-    , _multiClickWeight(DEFAULT_MULTICLICK_WEIGHT)
-    , _totalTimeSetting(DEFAULT_FREESTYLE_LENGTH)
-    , _timerDisplayRefresh(DEFAULT_DISPLAY_REFRESH)
-    , _timerDigits(DEFAULT_TIMER_DIGITS)
-    , _timerVisible(DEFAULT_TIMER_VISIBILITY)
 {
-	_majDedWeight[0] = DEFAULT_MD_LV1_WEIGHT;
-	_majDedWeight[1] = DEFAULT_MD_LV2_WEIGHT;
-	_majDedWeight[2] = DEFAULT_MD_LV3_WEIGHT;
+	// Load settings, assigning defaults if none exist.
+	QSettings settings("Elephark", "44clicker");
+	_majDedWeight[0] = settings.value("majDedWeight0", DEFAULT_MD_LV1_WEIGHT).toInt();
+	_majDedWeight[1] = settings.value("majDedWeight1", DEFAULT_MD_LV2_WEIGHT).toInt();
+	_majDedWeight[2] = settings.value("majDedWeight2", DEFAULT_MD_LV3_WEIGHT).toInt();
 
-	// todo: save/load settings
+	_multiClickWeight = settings.value("multiClickWeight", DEFAULT_MULTICLICK_WEIGHT).toInt();
+	_totalTimeSetting = settings.value("totalTimeSetting", DEFAULT_FREESTYLE_LENGTH).toUInt();
+	_timerDisplayRefresh = settings.value("timerDisplayRefresh", DEFAULT_DISPLAY_REFRESH).toInt();
+	_timerDigits = settings.value("timerDigits", DEFAULT_TIMER_DIGITS).toInt();
+	_timerVisible = settings.value("timerVisible", DEFAULT_TIMER_VISIBILITY).toInt();
+}
+
+/**
+ * @brief Save settings to disk.
+ * @return True.
+ */
+bool ClickPrefs::writePrefs()
+{
+	QSettings settings("Elephark", "44clicker");
+
+	settings.setValue("majDedWeight0", _majDedWeight[0]);
+	settings.setValue("majDedWeight1", _majDedWeight[1]);
+	settings.setValue("majDedWeight2", _majDedWeight[2]);
+
+	settings.setValue("multiClickWeight", _multiClickWeight);
+	settings.setValue("totalTimeSetting", _totalTimeSetting);
+	settings.setValue("timerDisplayRefresh", _timerDisplayRefresh);
+	settings.setValue("timerDigits", _timerDigits);
+	settings.setValue("timerVisible", _timerVisible);
+
+	// todo: Maybe give it a meaningful truth value?
+	return true;
 }
 
 /**

@@ -4,6 +4,7 @@
 #include "mainwindow.h"
 
 #include <QDebug>
+#include <QtWidgets>
 
 PrefDialog::PrefDialog(QWidget *parent) :
     QDialog(parent),
@@ -15,9 +16,11 @@ PrefDialog::PrefDialog(QWidget *parent) :
 
 	connect(ui->buttonBox, SIGNAL(accepted()), this, SLOT(savePrefs()));
 //	connect(ui->buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+	connect(ui->buttonBox->button(QDialogButtonBox::RestoreDefaults), SIGNAL(clicked()),
+	        this, SLOT(restoreDefaults()));
 
 
-//	ClickPrefs *p;
+	qDebug() << "buttonBox info =" << ui->buttonBox->button(QDialogButtonBox::RestoreDefaults);
 
 	// We'll work with a copy of the prefs.
 	// todo: We may not need _tmpPrefs after all.
@@ -53,9 +56,7 @@ PrefDialog::PrefDialog(QWidget *parent) :
 		qDebug() << "Error: PrefDialog: Parent invalid, preferences aborting!";
 	}
 
-
 	qDebug() << "Parent of PrefDialog is" << parent;
-
 
 	qDebug() << "PrefDialog::PrefDialog()";
 }
@@ -80,9 +81,26 @@ void PrefDialog::savePrefs()
 		p->setMultiClickWeight(ui->multiClickSpinBox->value());
 		p->setTotalTimeSetting(ui->totalTimeSpinBox->value() * 1000);
 
+		// Save them to disk.
+		p->writePrefs();
+
 		qDebug() << "PrefDialog::savePrefs(): Saved prefs";
 	}
 	else {
 		qDebug() << "Error: PrefDialog::savePrefs(): No prefs found!?";
 	}
+}
+
+/**
+ * @brief Repopulate the fields with default values, which the user can then save or discard.
+ */
+void PrefDialog::restoreDefaults()
+{
+	ui->md1SpinBox->setValue(DEFAULT_MD_LV1_WEIGHT);
+	ui->md2SpinBox->setValue(DEFAULT_MD_LV2_WEIGHT);
+	ui->md3SpinBox->setValue(DEFAULT_MD_LV3_WEIGHT);
+	ui->multiClickSpinBox->setValue(DEFAULT_MULTICLICK_WEIGHT);
+	ui->totalTimeSpinBox->setValue(DEFAULT_FREESTYLE_LENGTH / 1000);
+	// todo: Other settings?
+	qDebug() << "PrefDialog::restoreDefaults(): Restored defaults";
 }

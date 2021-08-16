@@ -24,6 +24,7 @@ private:
 
 private slots:
 	void savePrefs();
+	void restoreDefaults();
 };
 
 #endif // PREFDIALOG_H
