@@ -19,38 +19,27 @@ PrefDialog::PrefDialog(QWidget *parent) :
 	connect(ui->buttonBox->button(QDialogButtonBox::RestoreDefaults), SIGNAL(clicked()),
 	        this, SLOT(restoreDefaults()));
 
-
 	qDebug() << "buttonBox info =" << ui->buttonBox->button(QDialogButtonBox::RestoreDefaults);
 
-	// We'll work with a copy of the prefs.
-	// todo: We may not need _tmpPrefs after all.
+	// Let's grab the prefs, if they're valid (which should be always).
 	if (dynamic_cast<MainWindow*>(parent)->prefs() != nullptr) {
 		// Note: Don't try to use qobject_cast, since MainWindow is a grandchild class of QObject.
-		p = dynamic_cast<MainWindow*>(parent)->prefs();
-		_tmpPrefs = new ClickPrefs;
+		_prefs = dynamic_cast<MainWindow*>(parent)->prefs();
 
-		_tmpPrefs->setMultiClickWeight(p->multiClickWeight());
-		_tmpPrefs->setTotalTimeSetting(p->totalTimeSetting());
-		_tmpPrefs->setTimerDisplayRefresh(p->timerDisplayRefresh());
-		_tmpPrefs->setMDWeight(0, p->MDWeight(0));
-		_tmpPrefs->setMDWeight(1, p->MDWeight(1));
-		_tmpPrefs->setMDWeight(2, p->MDWeight(2));
-
-		qDebug() << "_tmpPrefs->totalTimeSetting =" << _tmpPrefs->totalTimeSetting();
-		qDebug() << "p->totalTimeSetting =" << p->totalTimeSetting();
+		qDebug() << "_prefs->totalTimeSetting =" << _prefs->totalTimeSetting();
 
 		// Populate the values in the widgets.
-		ui->md1SpinBox->setValue(_tmpPrefs->MDWeight(0));
-		ui->md2SpinBox->setValue(_tmpPrefs->MDWeight(1));
-		ui->md3SpinBox->setValue(_tmpPrefs->MDWeight(2));
-		ui->multiClickSpinBox->setValue(_tmpPrefs->multiClickWeight());
+		ui->md1SpinBox->setValue(_prefs->MDWeight(0));
+		ui->md2SpinBox->setValue(_prefs->MDWeight(1));
+		ui->md3SpinBox->setValue(_prefs->MDWeight(2));
+		ui->multiClickSpinBox->setValue(_prefs->multiClickWeight());
 
 		// If you want to do a >10min freestyle...tough.
 		ui->totalTimeSpinBox->setMaximum(600);
 		// If you want to do a <1sec freestyle...tough.
 		ui->totalTimeSpinBox->setMinimum(1);
 		// If you want to do a freestyle with a non-integer length in seconds...tough.
-		ui->totalTimeSpinBox->setValue(_tmpPrefs->totalTimeSetting() / 1000);
+		ui->totalTimeSpinBox->setValue(_prefs->totalTimeSetting() / 1000);
 	}
 	else {
 		qDebug() << "Error: PrefDialog: Parent invalid, preferences aborting!";
@@ -72,17 +61,17 @@ PrefDialog::~PrefDialog()
  */
 void PrefDialog::savePrefs()
 {
-	if (p)
+	if (_prefs)
 	{
 		// Copy back the dialog contents.
-		p->setMDWeight(0, ui->md1SpinBox->value());
-		p->setMDWeight(1, ui->md2SpinBox->value());
-		p->setMDWeight(2, ui->md3SpinBox->value());
-		p->setMultiClickWeight(ui->multiClickSpinBox->value());
-		p->setTotalTimeSetting(ui->totalTimeSpinBox->value() * 1000);
+		_prefs->setMDWeight(0, ui->md1SpinBox->value());
+		_prefs->setMDWeight(1, ui->md2SpinBox->value());
+		_prefs->setMDWeight(2, ui->md3SpinBox->value());
+		_prefs->setMultiClickWeight(ui->multiClickSpinBox->value());
+		_prefs->setTotalTimeSetting(ui->totalTimeSpinBox->value() * 1000);
 
 		// Save them to disk.
-		p->writePrefs();
+		_prefs->writePrefs();
 
 		qDebug() << "PrefDialog::savePrefs(): Saved prefs";
 	}
