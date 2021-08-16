@@ -1,10 +1,7 @@
 #include "prefdialog.h"
 #include "ui_prefdialog.h"
-
 #include "mainwindow.h"
-
-#include <QDebug>
-#include <QtWidgets>
+#include <QtWidgets> // Need this so we can use the restore defaults button.
 
 PrefDialog::PrefDialog(QWidget *parent) :
     QDialog(parent),
@@ -15,18 +12,12 @@ PrefDialog::PrefDialog(QWidget *parent) :
 	setWindowTitle("Preferences");
 
 	connect(ui->buttonBox, SIGNAL(accepted()), this, SLOT(savePrefs()));
-//	connect(ui->buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 	connect(ui->buttonBox->button(QDialogButtonBox::RestoreDefaults), SIGNAL(clicked()),
 	        this, SLOT(restoreDefaults()));
 
-	qDebug() << "buttonBox info =" << ui->buttonBox->button(QDialogButtonBox::RestoreDefaults);
-
 	// Let's grab the prefs, if they're valid (which should be always).
-	if (dynamic_cast<MainWindow*>(parent)->prefs() != nullptr) {
-		// Note: Don't try to use qobject_cast, since MainWindow is a grandchild class of QObject.
-		_prefs = dynamic_cast<MainWindow*>(parent)->prefs();
-
-		qDebug() << "_prefs->totalTimeSetting =" << _prefs->totalTimeSetting();
+	if (qobject_cast<MainWindow*>(parent)->prefs() != nullptr) {
+		_prefs = qobject_cast<MainWindow*>(parent)->prefs();
 
 		// Populate the values in the widgets.
 		ui->md1SpinBox->setValue(_prefs->MDWeight(0));
@@ -42,18 +33,13 @@ PrefDialog::PrefDialog(QWidget *parent) :
 		ui->totalTimeSpinBox->setValue(_prefs->totalTimeSetting() / 1000);
 	}
 	else {
-		qDebug() << "Error: PrefDialog: Parent invalid, preferences aborting!";
+//		qDebug() << "Error: PrefDialog: Parent invalid, preferences aborting!";
 	}
-
-	qDebug() << "Parent of PrefDialog is" << parent;
-
-	qDebug() << "PrefDialog::PrefDialog()";
 }
 
 PrefDialog::~PrefDialog()
 {
 	delete ui;
-	qDebug() << "PrefDialog::~PrefDialog()";
 }
 
 /**
@@ -72,11 +58,9 @@ void PrefDialog::savePrefs()
 
 		// Save them to disk.
 		_prefs->writePrefs();
-
-		qDebug() << "PrefDialog::savePrefs(): Saved prefs";
 	}
 	else {
-		qDebug() << "Error: PrefDialog::savePrefs(): No prefs found!?";
+//		qDebug() << "Error: PrefDialog::savePrefs(): No prefs found!?";
 	}
 }
 
@@ -90,6 +74,5 @@ void PrefDialog::restoreDefaults()
 	ui->md3SpinBox->setValue(DEFAULT_MD_LV3_WEIGHT);
 	ui->multiClickSpinBox->setValue(DEFAULT_MULTICLICK_WEIGHT);
 	ui->totalTimeSpinBox->setValue(DEFAULT_FREESTYLE_LENGTH / 1000);
-	// todo: Other settings?
-	qDebug() << "PrefDialog::restoreDefaults(): Restored defaults";
+	// todo: Other settings? ie what if something else gets corrupted?
 }
