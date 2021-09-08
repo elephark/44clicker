@@ -295,6 +295,12 @@ void MainWindow::timerRedraw() {
 	int mm = _timeRemaining / (60 * 1000);
 	// That ternary makes bare seconds behave more like you'd expect them to. Silly integer math.
 	int ss = ((_timeRemaining % (60 * 1000)) + (_prefs->timerDigits() ? 0 : 999)) / 1000;
+	// Oh, we also don't want 2:00 to display as 1:60 when the timer is running.
+	// There's probably a much more elegant way to handle all this. I'm sorry.
+	if (ss == 60) {
+		ss = 0;
+		mm++;
+	}
 	int cc = (_timeRemaining % 1000) / 10;
 	if (_prefs->timerDigits() == 1) { cc /= 10; }
 	QString dispText;
