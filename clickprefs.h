@@ -32,11 +32,13 @@ public:
 	int multiClickWeight() const { return _multiClickWeight; }
 	int totalTimeSetting() const { return _totalTimeSetting; }
 	int timerDisplayRefresh() const { return _timerDisplayRefresh; }
+	int timerDigits() const { return _timerDigits; }
 
 	/// Setters with obvious functionality.
 	void setMultiClickWeight(int weight) { _multiClickWeight = weight; }
 	void setTotalTimeSetting(int totalTime) { _totalTimeSetting = totalTime; }
 	void setTimerDisplayRefresh(int timeout) { _timerDisplayRefresh = timeout; }
+	void setTimerDigits(int digits) { _timerDigits = digits; }
 
 	bool writePrefs();
 	int MDWeight(int level) const;
@@ -51,7 +53,7 @@ private:
 	int _totalTimeSetting;     ///< Freestyle length, in milliseconds.
 	int _timerDisplayRefresh;  ///< Time in ms between display updates while _fsTimer is running
 	// todo: flash timer when it finishes?
-//	bool
+//	bool _timerIsFlashing;     ///< Is the timer supposed to be flashing right now?
 
 	// todo: appearance settings
 	int _timerDigits;          ///< How many digits we'll show for partial seconds

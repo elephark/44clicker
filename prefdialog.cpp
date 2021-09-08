@@ -24,6 +24,7 @@ PrefDialog::PrefDialog(QWidget *parent) :
 		ui->md2SpinBox->setValue(_prefs->MDWeight(1));
 		ui->md3SpinBox->setValue(_prefs->MDWeight(2));
 		ui->multiClickSpinBox->setValue(_prefs->multiClickWeight());
+		ui->timerDigitsSpinBox->setValue(_prefs->timerDigits());
 
 		// If you want to do a >10min freestyle...tough.
 		ui->totalTimeSpinBox->setMaximum(600);
@@ -31,6 +32,9 @@ PrefDialog::PrefDialog(QWidget *parent) :
 		ui->totalTimeSpinBox->setMinimum(1);
 		// If you want to do a freestyle with a non-integer length in seconds...tough.
 		ui->totalTimeSpinBox->setValue(_prefs->totalTimeSetting() / 1000);
+
+		// Restrict timer digits to sane values.
+		ui->timerDigitsSpinBox->setRange(0, 2);
 	}
 	else {
 //		qDebug() << "Error: PrefDialog: Parent invalid, preferences aborting!";
@@ -55,6 +59,7 @@ void PrefDialog::savePrefs()
 		_prefs->setMDWeight(2, ui->md3SpinBox->value());
 		_prefs->setMultiClickWeight(ui->multiClickSpinBox->value());
 		_prefs->setTotalTimeSetting(ui->totalTimeSpinBox->value() * 1000);
+		_prefs->setTimerDigits(ui->timerDigitsSpinBox->value());
 
 		// Save them to disk.
 		_prefs->writePrefs();
@@ -74,5 +79,6 @@ void PrefDialog::restoreDefaults()
 	ui->md3SpinBox->setValue(DEFAULT_MD_LV3_WEIGHT);
 	ui->multiClickSpinBox->setValue(DEFAULT_MULTICLICK_WEIGHT);
 	ui->totalTimeSpinBox->setValue(DEFAULT_FREESTYLE_LENGTH / 1000);
+	ui->timerDigitsSpinBox->setValue(DEFAULT_TIMER_DIGITS);
 	// todo: Other settings? ie what if something else gets corrupted?
 }

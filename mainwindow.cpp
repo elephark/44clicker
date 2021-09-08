@@ -270,6 +270,8 @@ void MainWindow::timerReset() {
 
 /**
  * @brief Redraws the LCD elements comprising the freestyle timer.
+ *
+ * Note that this function assumes _prefs->timerDigits is in range [0, 2].
  */
 void MainWindow::timerRedraw() {
 	// Cache the remaining time.
@@ -277,31 +279,54 @@ void MainWindow::timerRedraw() {
 		_timeRemaining = _fsTimer->remainingTime();
 	}
 
+	// Center the digits, in the way a QLCDNumber understands.
+	ui->timeElapsedLcd->setDigitCount(5 + (_prefs->timerDigits() ? _prefs->timerDigits() + 1 : 0));
+	ui->timeRemainingLcd->setDigitCount(5 + (_prefs->timerDigits() ? _prefs->timerDigits() + 1 : 0));
+
 	// Figure out how much time is left.
-	int timeElapsed = _prefs->totalTimeSetting() - _timeRemaining + 9; // the 9 makes it add up on screen
+	int timeElapsed = _prefs->totalTimeSetting() - _timeRemaining;
+	// Make things add up on screen.
+	if      (_prefs->timerDigits() == 1) { timeElapsed += 99; }
+	else if (_prefs->timerDigits() == 2) { timeElapsed += 9; }
+
 	if (timeElapsed < 0) { timeElapsed = 0; } // PARANOiA.mp3
 
-	// Divide time remaining down to minutes, seconds, hundredths, and push it out to the screen.
+	// Divide time remaining down to minutes, seconds, smaller units, and push it out to the screen.
 	int mm = _timeRemaining / (60 * 1000);
-	int ss = (_timeRemaining % (60 * 1000)) / 1000;
+	// That ternary makes bare seconds behave more like you'd expect them to. Silly integer math.
+	int ss = ((_timeRemaining % (60 * 1000)) + (_prefs->timerDigits() ? 0 : 999)) / 1000;
 	int cc = (_timeRemaining % 1000) / 10;
+	if (_prefs->timerDigits() == 1) { cc /= 10; }
 	QString dispText;
 
-	dispText = QString("%1:%2.%3")
-	        .arg(mm, 2, 10, QChar('0'))
-	        .arg(ss, 2, 10, QChar('0'))
-	        .arg(cc, 2, 10, QChar('0'));
+	if (_prefs->timerDigits()) {
+		dispText = QString("%1:%2.%3")
+		        .arg(mm, 2, 10, QChar('0'))
+		        .arg(ss, 2, 10, QChar('0'))
+		        .arg(cc, _prefs->timerDigits(), 10, QChar('0'));
+	} else { // timerDigits == 0
+		dispText = QString("%1:%2")
+		        .arg(mm, 2, 10, QChar('0'))
+		        .arg(ss, 2, 10, QChar('0'));
+	}
 	ui->timeRemainingLcd->display(dispText);
 
 	// Do it again for time elapsed.
 	mm = timeElapsed / (60 * 1000);
 	ss = (timeElapsed % (60 * 1000)) / 1000;
 	cc = (timeElapsed % 1000) / 10;
+	if (_prefs->timerDigits() == 1) { cc /= 10; }
 
-	dispText = QString("%1:%2.%3")
-	        .arg(mm, 2, 10, QChar('0'))
-	        .arg(ss, 2, 10, QChar('0'))
-	        .arg(cc, 2, 10, QChar('0'));
+	if (_prefs->timerDigits()) {
+		dispText = QString("%1:%2.%3")
+		        .arg(mm, 2, 10, QChar('0'))
+		        .arg(ss, 2, 10, QChar('0'))
+		        .arg(cc, _prefs->timerDigits(), 10, QChar('0'));
+	} else { // timerDigits == 0
+		dispText = QString("%1:%2")
+		        .arg(mm, 2, 10, QChar('0'))
+		        .arg(ss, 2, 10, QChar('0'));
+	}
 	ui->timeElapsedLcd->display(dispText);
 }
 
@@ -311,6 +336,7 @@ void MainWindow::timerRedraw() {
 void MainWindow::showPrefDialog() {
 	PrefDialog d(this);
 	if (d.exec() == QDialog::Accepted) {
-		// todo: They clicked OK, so save/reload the new prefs.
+		// They clicked OK, so refresh anything the new prefs would affect.
+		timerRedraw();
 	}
 }
