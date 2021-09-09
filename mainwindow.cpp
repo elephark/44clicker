@@ -334,6 +334,17 @@ void MainWindow::timerRedraw() {
 		        .arg(ss, 2, 10, QChar('0'));
 	}
 	ui->timeElapsedLcd->display(dispText);
+
+	// Turn the timers red when the time runs out.
+	QPalette pal = QPalette();
+	if (!_timeRemaining) {
+		pal.setColor(QPalette::Window, QColor(222, 22, 22));
+		pal.setColor(QPalette::WindowText, Qt::white);
+	}
+	ui->timeRemainingLcd->setAutoFillBackground(true);
+	ui->timeElapsedLcd->setAutoFillBackground(true);
+	ui->timeRemainingLcd->setPalette(pal);
+	ui->timeElapsedLcd->setPalette(pal);
 }
 
 /**
